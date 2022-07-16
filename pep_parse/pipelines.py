@@ -10,7 +10,6 @@ DATETIME_FORMAT = '%Y-%m-%d_%H-%M-%S'
 class PepParsePipeline:
 
     count_status = defaultdict(int)
-    total = 0
     result = []
 
     def open_spider(self, spider):
@@ -18,7 +17,6 @@ class PepParsePipeline:
 
     def process_item(self, item, spider):
         self.count_status[item['status']] += 1
-        self.total += 1
         return item
 
     def close_spider(self, spider):
@@ -29,7 +27,7 @@ class PepParsePipeline:
             )
 
         self.result.append(
-            ('Total', self.total)
+            ('Total', sum(count for count in self.count_status.values()))
         )
 
         now = dt.datetime.now()
